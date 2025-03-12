@@ -1,0 +1,53 @@
+name: Run PB3
+
+on:
+  #push:
+   # branches:
+    #  - main
+  #schedule:
+    #- cron: '0 11 * * 1-5'  # Executa seg-sex às 08:00
+    #- cron: '0 15 * * 1-5'  # Executa seg-sex às 12:00
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Adiciona permissão de escrita
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar ambiente Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalar Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          
+      - name: Verificar instalação do Chrome
+        run: google-chrome --version
+        
+      - name: Instalar dependências
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Executar script Python
+        #env:
+          #EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          #EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: python PB3.py
+
+      - name: Commitar arquivos modificados
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git commit -m "Atualização automática dos arquivos"
+          git push
+        continue-on-error: true
