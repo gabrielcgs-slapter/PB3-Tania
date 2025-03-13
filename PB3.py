@@ -139,13 +139,14 @@ for i in CAAE:
             time.sleep(1)
             o += 1
 
-    time.sleep(5)
+    time.sleep(10)
     
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     
     #voltar ao menu
+    wait.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[2]/div/div[3]/div[2]/form/a[2]')))
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
     wait.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[2]/div/div[3]/div[2]/form/a[2]'))).click() 
-    
     #extrai o nome do estudo
     nome_estudo = soup.find('td', class_="text-top").text[21:].replace('"',"")
     
